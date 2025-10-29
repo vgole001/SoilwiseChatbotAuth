@@ -41,7 +41,7 @@
       "credentials": [
         {
           "type": "password",
-          "value": "ChangeThisPassword123!",
+          "value": "Password123!",
           "temporary": true
         }
       ],

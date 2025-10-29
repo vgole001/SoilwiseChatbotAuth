@@ -1,11 +1,7 @@
 // src/pages/Dashboard.jsx
 import { useState, useEffect, useRef } from 'react';
 import {
-  AppBar,
   Box,
-  Button,
-  Container,
-  Toolbar,
   Typography,
 } from '@mui/material';
 import { keycloak } from '../utils/keycloak';
@@ -61,10 +57,10 @@ const Dashboard = () => {
   };
 
   const handleNewConversation = () => {
-    const newId = Math.max(...conversations.map(c => c.id)) + 1;
+    const newId = conversations.length > 0 ? Math.max(...conversations.map(c => c.id)) + 1 : 1;
     const newConv = {
       id: newId,
-      title: `New Conversation ${newId}`,
+      title: 'New chat',
       timestamp: 'Just now',
     };
     setConversations([newConv, ...conversations]);
@@ -90,7 +86,7 @@ const Dashboard = () => {
     
     setTimeout(() => {
       const responses = [
-        "Great question! Here's what I can tell you about that...",
+        "Chatbot response to be written here...",
       ];
       
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
@@ -104,7 +100,7 @@ const Dashboard = () => {
       
       setMessages(prev => [...prev, newMessage]);
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }, 100 + Math.random() * 1000);
   };
 
   const handleSendMessage = (content) => {
@@ -119,80 +115,78 @@ const Dashboard = () => {
     simulateResponse(content);
   };
 
-return (
-  <Box sx={{ display: 'flex', height: '100vh' }}>
-    <ChatSidebar
-      open={sidebarOpen}
-      onToggle={handleToggleSidebar}
-      conversations={conversations}
-      activeConversation={activeConversation}
-      onSelectConversation={handleSelectConversation}
-      onNewConversation={handleNewConversation}
-      userInfo={userInfo}
-      onLogout={handleLogout}
-    />
+  return (
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+      <ChatSidebar
+        open={sidebarOpen}
+        onToggle={handleToggleSidebar}
+        conversations={conversations}
+        activeConversation={activeConversation}
+        onSelectConversation={handleSelectConversation}
+        onNewConversation={handleNewConversation}
+        userInfo={userInfo}
+        onLogout={handleLogout}
+      />
 
-    <Box
-      sx={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-      }}
-    >
       <Box
         sx={{
           flexGrow: 1,
-          overflow: 'auto',
-          py: 3,
           display: 'flex',
           flexDirection: 'column',
-          width: '100%',
+          width: sidebarOpen ? `calc(100% - ${drawerWidth}px)` : '100%',
+          ml: sidebarOpen ? 0 : `-${drawerWidth}px`,
+          transition: 'margin-left 0.3s, width 0.3s',
         }}
       >
-        <Box sx={{ 
-          width: '100%', 
-          maxWidth: 800, 
-          mx: 'auto',
-          px: 2,
-          transform: sidebarOpen ? `translateX(calc(${drawerWidth}px / 2))` : 'translateX(0)',
-          transition: 'transform 0.3s',
-        }}>
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
-          
-          {isTyping && (
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                Chatbot is pondering hard...
-              </Typography>
-            </Box>
-          )}
-          
-          <div ref={messagesEndRef} />
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflow: 'auto',
+            py: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+          }}
+        >
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: 800, 
+            mx: 'auto',
+            px: 3,
+          }}>
+            {messages.map((message) => (
+              <ChatMessage key={message.id} message={message} />
+            ))}
+            
+            {isTyping && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                  Chatbot is thinking...
+                </Typography>
+              </Box>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </Box>
         </Box>
-      </Box>
 
-      <Box sx={{ 
-        pb: 3, 
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-      }}>
         <Box sx={{ 
-          width: '100%', 
-          maxWidth: 800, 
-          px: 2,
-          transform: sidebarOpen ? `translateX(calc(${drawerWidth}px / 2))` : 'translateX(0)',
-          transition: 'transform 0.3s',
+          pb: 3, 
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
         }}>
-          <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
+          <Box sx={{ 
+            width: '100%', 
+            maxWidth: 800, 
+            px: 2,
+          }}>
+            <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
+          </Box>
         </Box>
       </Box>
     </Box>
-  </Box>
-);
+  );
 };
 
 export default Dashboard;

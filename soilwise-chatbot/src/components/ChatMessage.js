@@ -1,62 +1,50 @@
-// src/components/ChatMessage.jsx
-import { Box, Paper, Typography, Avatar } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import { Person, SmartToy } from '@mui/icons-material';
 
 const ChatMessage = ({ message }) => {
   const isUser = message.role === 'user';
   console.log("Rendering message:", message);
+
   return (
     <Box
       sx={{
         display: 'flex',
-        justifyContent: isUser ? 'flex-end' : 'flex-start',
+        maxWidth: '100%',
         mb: 2,
-        px: 2,
       }}
     >
-      <Box
+      <Paper
+        elevation={1}
         sx={{
-          display: 'flex',
-          flexDirection: isUser ? 'row-reverse' : 'row',
-          alignItems: 'flex-start',
+          p: 0.5,
+          bgcolor: isUser ? '#efefef' : 'background.paper',
           maxWidth: '80%',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
         }}
-      >git reset --soft HEAD~2
+      >
+        {/* Icon only*/}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 30,
+            height: 30,
+          }}
+        >
+          {isUser ? (
+            <Person />
+          ) : (
+            <SmartToy sx={{ color: '#AF734A' }} />
+          )}
+        </Box>
 
-        <Avatar
-          sx={{
-            bgcolor: isUser ? 'primary.main' : 'secondary.main',
-            width: 36,
-            height: 36,
-            mx: 1,
-          }}
-        >
-          {isUser ? <Person /> : <SmartToy />}
-        </Avatar>
-        
-        <Paper
-          elevation={1}
-          sx={{
-            p: 2,
-            bgcolor: isUser ? 'primary.light' : 'background.paper',
-            color: isUser ? 'primary.contrastText' : 'text.primary',
-          }}
-        >
-          <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-            {message.content}
-          </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              display: 'block',
-              mt: 1,
-              opacity: 0.7,
-            }}
-          >
-            {message.timestamp}
-          </Typography>
-        </Paper>
-      </Box>
+        <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', flex: 1 }}>
+          {message.content}
+        </Typography>
+      </Paper>
     </Box>
   );
 };

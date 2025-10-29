@@ -1,4 +1,3 @@
-// src/components/ChatSidebar.jsx
 import { useState } from 'react';
 import {
   Box,
@@ -113,13 +112,13 @@ const ChatSidebar = ({
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={onNewConversation}
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, textTransform: "none" }}
           >
-            New Conversation
+            New Chat
           </Button>
           
           <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, px: 1 }}>
-            Recent Conversations
+            Recent Chats
           </Typography>
         </Box>
 

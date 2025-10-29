@@ -1,10 +1,10 @@
-// src/components/ChatInput.jsx
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { TextField, IconButton, Paper } from '@mui/material';
-import { Send as SendIcon } from '@mui/icons-material';
+import { LuSquareArrowUp } from "react-icons/lu";
 
 const ChatInput = ({ onSendMessage, disabled }) => {
   const [message, setMessage] = useState('');
+  const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,6 +20,13 @@ const ChatInput = ({ onSendMessage, disabled }) => {
       handleSubmit(e);
     }
   };
+
+  // Re-focus input after message is sent (when disabled changes from true to false)
+  useEffect(() => {
+    if (!disabled && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [disabled]);
 
   return (
     <Paper
@@ -37,35 +44,38 @@ const ChatInput = ({ onSendMessage, disabled }) => {
       <TextField
         fullWidth
         multiline
-        maxRows={4}
+        maxRows={5}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         placeholder="Type your message..."
         disabled={disabled}
-        variant="outlined"
+        variant="standard"
+        inputRef={inputRef}
+        slotProps={{
+          input: {
+            disableUnderline: true,
+          },
+        }}
         sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 2,
+          overflow: 'hidden',
+          '& .MuiInputBase-root': {
+            fontSize: '1rem',
+            padding: '7px 0',
           },
         }}
       />
       <IconButton
         type="submit"
-        color="primary"
         disabled={!message.trim() || disabled}
         sx={{
-          bgcolor: 'primary.main',
+          bgcolor: '#AF734A',
           color: 'white',
-          '&:hover': {
-            bgcolor: 'primary.dark',
-          },
-          '&.Mui-disabled': {
-            bgcolor: 'action.disabledBackground',
-          },
+          '&:hover': { bgcolor: '#ad4f11ff' },
+          '&.Mui-disabled': { bgcolor: 'action.disabledBackground' },
         }}
       >
-        <SendIcon />
+        <LuSquareArrowUp/>
       </IconButton>
     </Paper>
   );
