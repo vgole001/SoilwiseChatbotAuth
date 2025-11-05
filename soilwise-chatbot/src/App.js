@@ -21,17 +21,20 @@ function App() {
     keycloak
       .init({
         onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        checkLoginIframe: false,
+        checkLoginIframe: false,  // Disable iframe checks (causes cookie issues)
         pkceMethod: 'S256',
+        flow: 'standard',  // Explicitly use standard flow
+        responseMode: 'fragment',  // Use fragment for better compatibility
       })
       .then((authenticated) => {
         console.log('Keycloak initialized. Authenticated:', authenticated);
-        console.log('Current URL:', window.location.href);
+        console.log('Token:', keycloak.token);
+        console.log('User:', keycloak.tokenParsed);
         setKeycloakInitialized(true);
       })
       .catch((error) => {
         console.error('Keycloak initialization failed:', error);
+        console.error('Error details:', error.error, error.error_description);
         setKeycloakInitialized(true);
       });
   }, []);

@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js';
 
 export const keycloak = new Keycloak({
-  url: 'http://localhost:8090/',
+  url: 'https://id.soilwise.wetransform.eu',
   realm: 'soilwise-chatbot-realm',
   clientId: 'soilwise-client',
 });
